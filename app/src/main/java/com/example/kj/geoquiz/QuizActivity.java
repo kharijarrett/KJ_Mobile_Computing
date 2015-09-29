@@ -49,7 +49,7 @@ public class QuizActivity extends AppCompatActivity {
     protected void onSaveInstanceState(Bundle savedInstanceState){
         super.onSaveInstanceState(savedInstanceState);
         savedInstanceState.putInt(KEY_INDEX,mCurrentIndex);
-        //savedInstanceState.putBoolean(IS_CHEAT,mIsCheater);
+        savedInstanceState.putBoolean(IS_CHEAT,mIsCheater);
     }
 
     private void checkAnswer(boolean userPressedTrue){
@@ -86,7 +86,12 @@ public class QuizActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_quiz);
-        Log.d(TAG, "onDestroy() called!");
+        Log.d(TAG, "onCreate() called!");
+
+        if (savedInstanceState != null){
+            mCurrentIndex = savedInstanceState.getInt(KEY_INDEX,0);
+           // mIsCheater = savedInstanceState.getBoolean(IS_CHEAT,false);
+        }
 
         mQuestionTextView = (TextView) findViewById(R.id.question_text_view);
         mQuestionTextView.setOnClickListener(new View.OnClickListener() {
