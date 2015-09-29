@@ -49,7 +49,7 @@ public class QuizActivity extends AppCompatActivity {
     protected void onSaveInstanceState(Bundle savedInstanceState){
         super.onSaveInstanceState(savedInstanceState);
         savedInstanceState.putInt(KEY_INDEX,mCurrentIndex);
-        savedInstanceState.putBoolean(IS_CHEAT,mIsCheater);
+       // savedInstanceState.putBoolean(IS_CHEAT,mIsCheater);
     }
 
     private void checkAnswer(boolean userPressedTrue){
