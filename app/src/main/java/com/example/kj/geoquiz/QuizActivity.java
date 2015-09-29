@@ -26,7 +26,7 @@ public class QuizActivity extends AppCompatActivity {
     private Button mCheatButton;
     private ImageButton mNextButton;
     private ImageButton mPrevButton;
-    private boolean mIsCheater;
+    private boolean[] mIsCheater = {false, false, false, false, false};
     private TextView mQuestionTextView;
     private Question[] mQuestionBank = new Question[] {
 
@@ -49,13 +49,13 @@ public class QuizActivity extends AppCompatActivity {
     protected void onSaveInstanceState(Bundle savedInstanceState){
         super.onSaveInstanceState(savedInstanceState);
         savedInstanceState.putInt(KEY_INDEX,mCurrentIndex);
-        savedInstanceState.putBoolean(IS_CHEAT,mIsCheater);
+        savedInstanceState.putBooleanArray(IS_CHEAT,mIsCheater);
     }
 
     private void checkAnswer(boolean userPressedTrue){
         boolean isAnswerTrue = mQuestionBank[mCurrentIndex].isAnswerTrue();
         int messageResId=0;
-        if(mIsCheater){
+        if(mIsCheater[mCurrentIndex]){
             messageResId = R.string.judgement_toast;
         }
         else {
@@ -77,7 +77,7 @@ public class QuizActivity extends AppCompatActivity {
             if (data == null){
                 return;
             }
-            mIsCheater = CheatActivity.wasAnswerShown(data); //If they cheated, set mIsCheater to true
+            mIsCheater[mCurrentIndex] = CheatActivity.wasAnswerShown(data); //If they cheated, set mIsCheater to true
 
         }
     }
@@ -90,7 +90,7 @@ public class QuizActivity extends AppCompatActivity {
 
         if (savedInstanceState != null){
             mCurrentIndex = savedInstanceState.getInt(KEY_INDEX,0);
-            mIsCheater = savedInstanceState.getBoolean(IS_CHEAT,false);
+            mIsCheater = savedInstanceState.getBooleanArray(IS_CHEAT);
         }
 
         mQuestionTextView = (TextView) findViewById(R.id.question_text_view);
@@ -144,7 +144,7 @@ public class QuizActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 mCurrentIndex= (mCurrentIndex+1) % mQuestionBank.length;
-                mIsCheater = false;
+                mIsCheater[mCurrentIndex] = false;
                 updateQuestion();
             }
 
