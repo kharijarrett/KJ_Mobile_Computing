@@ -49,7 +49,7 @@ public class QuizActivity extends AppCompatActivity {
     protected void onSaveInstanceState(Bundle savedInstanceState){
         super.onSaveInstanceState(savedInstanceState);
         savedInstanceState.putInt(KEY_INDEX,mCurrentIndex);
-       // savedInstanceState.putBoolean(IS_CHEAT,mIsCheater);
+        savedInstanceState.putBoolean(IS_CHEAT,mIsCheater);
     }
 
     private void checkAnswer(boolean userPressedTrue){
@@ -90,7 +90,7 @@ public class QuizActivity extends AppCompatActivity {
 
         if (savedInstanceState != null){
             mCurrentIndex = savedInstanceState.getInt(KEY_INDEX,0);
-           // mIsCheater = savedInstanceState.getBoolean(IS_CHEAT,false);
+            mIsCheater = savedInstanceState.getBoolean(IS_CHEAT,false);
         }
 
         mQuestionTextView = (TextView) findViewById(R.id.question_text_view);
