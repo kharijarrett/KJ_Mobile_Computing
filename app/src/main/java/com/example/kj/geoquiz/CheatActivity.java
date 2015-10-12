@@ -1,13 +1,18 @@
 package com.example.kj.geoquiz;
 
+import android.animation.Animator;
+import android.animation.AnimatorListenerAdapter;
 import android.content.Context;
 import android.content.Intent;
+import android.os.Build;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewAnimationUtils;
+import android.view.animation.Animation;
 import android.widget.Button;
 import android.widget.TextView;
 
@@ -23,10 +28,11 @@ public class CheatActivity extends AppCompatActivity {
     private TextView mAnswerTextView;
     private Button mShowAnswer;
     private boolean mIsAnswerShown;
+    private TextView mSdkTextView;
 
     public static Intent newIntent(Context packageContext, boolean answerIsTrue){
         Intent i = new Intent(packageContext, CheatActivity.class);
-        i.putExtra(EXTRA_ANSWER_IS_TRUE,answerIsTrue);
+        i.putExtra(EXTRA_ANSWER_IS_TRUE, answerIsTrue);
         return i;
 
     }
@@ -45,7 +51,7 @@ public class CheatActivity extends AppCompatActivity {
     protected void onSaveInstanceState(Bundle savedInstanceState){
         super.onSaveInstanceState(savedInstanceState);
         //Log.i(TAG,"onSaveInstanceState"); //To say we're here
-        savedInstanceState.putBoolean(CHEAT_TAG,mIsAnswerShown);
+        savedInstanceState.putBoolean(CHEAT_TAG, mIsAnswerShown);
 
     }
 
@@ -54,13 +60,17 @@ public class CheatActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_cheat);
 
+        mSdkTextView = (TextView) findViewById(R.id.sdkTextView);
+        mSdkTextView.setText("API Level " + String.valueOf(Build.VERSION.SDK_INT));
+
+
         if (savedInstanceState!= null){//This isn't the first time on this damn screen
             mIsAnswerShown=savedInstanceState.getBoolean(CHEAT_TAG, false);
             if (mIsAnswerShown){
                 setAnswerShownResult(true);
                 showAnswer();
             }
-            //Get that result_ok and put it somewhere
+
         }
 
 
@@ -74,6 +84,26 @@ public class CheatActivity extends AppCompatActivity {
                 showAnswer();
                 mIsAnswerShown = true;
                 setAnswerShownResult(true); //They cheated... Set that result
+
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                    int cx = mShowAnswer.getWidth() / 2;
+                    int cy = mShowAnswer.getHeight() / 2;
+                    float radius = mShowAnswer.getWidth();
+                    Animator anim = ViewAnimationUtils.createCircularReveal(mShowAnswer, cx, cy, radius, 0);
+                    anim.addListener(new AnimatorListenerAdapter() {
+                        @Override
+                        public void onAnimationEnd(Animator animation) {
+                            super.onAnimationEnd(animation);
+                            mAnswerTextView.setVisibility(View.VISIBLE);
+                            mShowAnswer.setVisibility(View.INVISIBLE);
+                        }
+                    });
+                    anim.start();
+                }
+                else{
+                    mAnswerTextView.setVisibility(View.VISIBLE);
+                    mShowAnswer.setVisibility(View.INVISIBLE);
+                }
             }
         });
     }

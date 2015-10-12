@@ -29,5 +29,12 @@
         android:text="@string/show_answer_button"
         android:id="@+id/showAnswerButton"/>
 
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Placeholder Text"
+        android:id="@+id/sdkTextView"
+        android:layout_gravity="center_horizontal"/>
+
 
 </LinearLayout>
